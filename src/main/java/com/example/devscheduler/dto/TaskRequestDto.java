@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class TaskRequestDto {
-    private String userName;
     private String title;
     private String content;
+    private Long userId;
 }

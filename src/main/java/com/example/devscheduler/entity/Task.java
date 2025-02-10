@@ -14,7 +14,6 @@ public class Task extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
     private String title;
     private String content;
 
@@ -22,17 +21,14 @@ public class Task extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Task(String userName, String title, String content) {
-        this.userName = userName;
+    public Task(String title, String content, User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 
     public void update(TaskRequestDto dto) {
-        this.userName = dto.getUserName();
         this.title = dto.getTitle();
         this.content = dto.getContent();
     }
-
-
 }
