@@ -1,10 +1,7 @@
 package com.example.devscheduler.entity;
 
 import com.example.devscheduler.dto.TaskRequestDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +18,10 @@ public class Task extends BaseEntity{
     private String title;
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Task(String userName, String title, String content) {
         this.userName = userName;
         this.title = title;
@@ -32,4 +33,6 @@ public class Task extends BaseEntity{
         this.title = dto.getTitle();
         this.content = dto.getContent();
     }
+
+
 }

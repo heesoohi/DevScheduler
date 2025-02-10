@@ -50,6 +50,7 @@ public class TaskService {
         return new TaskResponseDto(task.getId(), task.getUserName(), task.getTitle(), task.getContent());
     }
 
+    @Transactional
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new IllegalArgumentException("Task with id " + id + " not found");
