@@ -1,3 +1,5 @@
+# DevScheduler
+
 ## API 명세서
 
 ### User API
@@ -50,3 +52,7 @@ updated_at TIMESTAMP,
 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 ```
+
+## ERD
+
+![img.png](img.png)
