@@ -1,8 +1,10 @@
 package com.example.devscheduler.controller;
 
+import com.example.devscheduler.dto.LoginRequestDto;
 import com.example.devscheduler.dto.UserRequestDto;
 import com.example.devscheduler.dto.UserResponseDto;
 import com.example.devscheduler.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +39,17 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+        userService.login(loginRequestDto, request);
+        return ResponseEntity.ok("Login Successful");
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        userService.logout(request);
+        return ResponseEntity.ok("Logout Successful");
     }
 }

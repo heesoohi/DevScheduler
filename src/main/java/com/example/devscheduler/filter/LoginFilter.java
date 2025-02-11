@@ -13,7 +13,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
     // 로그인 인증 할 필요 없는 URL Path 배열
-    private static final String[] WHITE_LIST = {"/", "/user/signup", "/login", "/logout"};
+    private static final String[] WHITE_LIST = {"/", "/users", "/login", "/logout"};
 
     @Override
     public void doFilter(
@@ -28,7 +28,7 @@ public class LoginFilter implements Filter {
 
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-        log.info("로그인 필터 로직 실행");
+        log.info("로그인 필터 로직 실행: {}", uri);
 
         // 로그인 해야 하는 url 인 경우
         if (!isWhiteList(uri)){
@@ -37,7 +37,8 @@ public class LoginFilter implements Filter {
 
             // 로그인 하지 않은 사용자인 경우. 즉, 세션이 없는 경우
             if(session == null || session.getAttribute("sessionKey") == null){
-                throw new RuntimeException("로그인 해주세요.");
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Need Login");
+                return;
             }
 
             // 로그인 성공 로직

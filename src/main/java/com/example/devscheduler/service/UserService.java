@@ -1,18 +1,25 @@
 package com.example.devscheduler.service;
 
+import com.example.devscheduler.dto.LoginRequestDto;
 import com.example.devscheduler.dto.UserRequestDto;
 import com.example.devscheduler.dto.UserResponseDto;
 import com.example.devscheduler.entity.User;
 import com.example.devscheduler.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -56,5 +63,29 @@ public class UserService {
             throw new IllegalArgumentException("User with id " + id + " does not exist");
         }
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void login(LoginRequestDto dto, HttpServletRequest req) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email"));
+
+        if(!user.getPassword().equals(dto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+        }
+
+        HttpSession session = req.getSession();
+        session.setAttribute("sessionKey", user.getId());
+
+        log.info("Logged in user with email {}", user.getEmail());
+    }
+
+    @Transactional
+    public void logout(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if(session != null) {
+            session.invalidate();
+            log.info("Logged out");
+        }
     }
 }
