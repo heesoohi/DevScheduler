@@ -26,3 +26,27 @@
 | `GET`  | `/tasks/{id}`    | 일정 조회        | 없음 | `{ "id": 1, "title": "회의", "content": "팀 미팅", "userId": 1 }` |
 | `PUT`  | `/tasks/{id}`    | 일정 수정        | `{ "title": "업무 회의", "content": "업무 진행 상황", "userId": 1 }` | `{ "id": 1, "title": "업무 회의", "content": "업무 진행 상황", "userId": 1 }` |
 | `DELETE` | `/tasks/{id}`    | 일정 삭제        | 없음 | `{ "message": "일정이 삭제되었습니다." }` |
+
+## SQL
+
+```SQL
+CREATE TABLE user (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL,
+password VARCHAR(255) NOT NULL,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP,
+UNIQUE(email)
+);
+
+CREATE TABLE task (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(255) NOT NULL,
+content TEXT NOT NULL,
+user_id BIGINT NOT NULL,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP,
+FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+```
